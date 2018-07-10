@@ -472,7 +472,6 @@ def menu():
    print('=' * 20)
    print('r: Run avito search')
    print('s: Short/full view switch')
-   print('o: Open in browser')
    print('p: Preferences')
    print('d: Download data file')
    print('q: Quit')
@@ -537,15 +536,16 @@ if __name__ == '__main__':
       dumped = restore(short)
       output(dumped)
       c = menu()
+
+      output(dumped)
+      print('=' * 20)
+      print()
+
       if c == 'q':
          break
       elif c == 's':
          short = not short         
       elif c in ['r']:
-         output(dumped)
-         print('=' * 20)
-         print()
-
          short = False
          dumped = restore(short)
 
@@ -568,16 +568,15 @@ if __name__ == '__main__':
             print('* New:', newCnt)
 
             save(result)
-      elif c in ['o']:
-         for i in dumped:
-            webbrowser.open_new_tab(i.link)
+      #elif c in ['o']:
+      #   for i in dumped:
+      #      webbrowser.open_new_tab(i.link)
       elif c in ['p']:
          v = [ 'minPrice',
                'maxPrice',
                'redPrice',
                'greenPrice'
               ];
-         print('-' * 20)
          i = 0
          for n in v:
             print('{}: {} ({})'.format(i, n, globals()[n]))
@@ -587,6 +586,7 @@ if __name__ == '__main__':
          print('Choice: ', end='')
          c = input().lower()
          if c in ['q']:
+            clear()
             continue
          
          i = int(c)
