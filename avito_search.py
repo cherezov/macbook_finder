@@ -453,13 +453,8 @@ def restore(short):
 
 def edit_dialog(dumped, c):
    #dumped = [i for i in dumped if not i.banned]
-   try:
-      if int(c) > len(dumped):
-         return False
-   except Exception as e: 
-      return False
    clear()
-   i = edit(dumped[int(c.strip())])
+   i = edit(dumped[c])
    if i is None:
       return False
    print(i)
@@ -568,9 +563,6 @@ if __name__ == '__main__':
             print('* New:', newCnt)
 
             save(result)
-      #elif c in ['o']:
-      #   for i in dumped:
-      #      webbrowser.open_new_tab(i.link)
       elif c in ['p']:
          v = [ 'minPrice',
                'maxPrice',
@@ -599,8 +591,24 @@ if __name__ == '__main__':
          urlretrieve('https://github.com/cherezov/macbook_finder/blob/master/avito_apple.data?raw=true', dataFileNameDef)
          print('Done')
       else:
-         while edit_dialog(dumped, c):
-            save(dumped)
+         try:
+            c = int(c.strip())
+            if c > len(dumped):
+               continue 
+         except Exception as e: 
+            continue
+
+         itemToChange = dumped[c]
+
+         fullDump = restore(False)
+         i = 0
+         for f in fullDump:
+            if f.id == itemToChange.id:
+               break
+            i += 1
+
+         while edit_dialog(fullDump, i):
+            save(fullDump)
       clear()
 
    clear()
