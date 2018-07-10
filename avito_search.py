@@ -2,6 +2,7 @@
 # -*- coding: cp1251 -*-
 from urllib.request import urlopen
 from urllib.request import Request
+from urllib.request import urlretrieve
 from bs4 import BeautifulSoup
 import webbrowser
 import tempfile
@@ -473,7 +474,6 @@ def menu():
    print('s: Short/full view switch')
    print('o: Open in browser')
    print('p: Preferences')
-   print('u: Upload data file')
    print('d: Download data file')
    print('q: Quit')
    print('Choice: ', end='')
@@ -594,7 +594,10 @@ if __name__ == '__main__':
          print('New "{}": '.format(varName), end = '')
 
          globals()[varName] = int(input())
-         
+      elif c in ['d']:
+         print('Downloading data file...')
+         urlretrieve('https://github.com/cherezov/macbook_finder/blob/master/avito_apple.data?raw=true', dataFileNameDef)
+         print('Done')
       else:
          while edit_dialog(dumped, c):
             save(dumped)
