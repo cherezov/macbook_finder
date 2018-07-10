@@ -15,10 +15,10 @@ from datetime import date
 from colorama import Fore, init, Style
 
 minPrice = 32000
-maxPrice = 45000
+maxPrice = 50000
 query = 'macbook+pro+13'
 
-redPrice = 43500
+redPrice = 44500
 greenPrice = 40000
 
 dataFileNameDef = 'avito_apple.data'
