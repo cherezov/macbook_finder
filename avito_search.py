@@ -99,6 +99,7 @@ class Item:
       self.link = ''
       self.title = ''
       self.text = ''
+      self.changed_text = ''
       self.price = 0
       self.oldPrice = 0
       self.retina = False
@@ -125,6 +126,8 @@ class Item:
             continue
          if hasattr(p, a):
             setattr(p, a, getattr(item, a))
+      if not p.changed_text:
+         p.changed_text = p.text
       return p
 
    def floatYear(self):
@@ -200,7 +203,7 @@ class Item:
          colorPrice = Fore.BLUE
          color = Fore.BLUE
 
-      return  (colorPrice + '{} {: >5}| ' + color + '{: >2} | {: >2} days | {} | {}' + Fore.RESET).format(self.price, priceDelta, features, self.days(), self.source, self.comment)
+      return  (colorPrice + '{} {: >5}| ' + color + '{: >2} | {: >3} days | {} | {}' + Fore.RESET).format(self.price, priceDelta, features, self.days(), self.source, self.comment)
 
 def hasAttr(a, d):
    return a in d.attrs
@@ -494,6 +497,7 @@ def merge(stored, loaded):
 
       if s.deleted:
          s.comment = '[restored]' + s.comment
+         s.deleted = False
          restoredCnt += 1
          result.append(s)
          continue
@@ -501,7 +505,11 @@ def merge(stored, loaded):
       loaded_item = loaded_item[0]
 
       if (not s.price == loaded_item.price) or (not s.oldPrice == loaded_item.oldPrice):
-         s.comment += '[changed] {}->{}'.format(s.price, loaded_item.price)
+         s.comment = '[changed] {}->{} '.format(s.price, loaded_item.price) + s.comment
+         changedCnt += 1
+      if not s.text == loaded_item.text and not s.changed_text == loaded_item.text:
+         s.comment = '[changed text] ' + s.comment
+         s.changed_text = loaded_item.text
          changedCnt += 1
       s.price = loaded_item.price
       s.oldPrice = loaded_item.oldPrice
@@ -516,7 +524,6 @@ def merge(stored, loaded):
    result.sort(key=lambda x: int(x.year) * 1000000 + int(x.gb) + int(x.ram) * (100 if int(x.ram) > 4 else 1), reverse=True)
 
    return result, removedCnt, changedCnt, newCnt, restoredCnt
-
 if __name__ == '__main__':
    import sys
    init()
